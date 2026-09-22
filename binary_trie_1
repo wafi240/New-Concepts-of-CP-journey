@@ -1,0 +1,47 @@
+struct node
+{
+    int child[2];
+    int count = 0;
+    node()
+    {
+        child[0] = child[1] = -1;
+        count = 0;
+    }
+};
+
+vector<node> trie;
+void insert(int num)
+{
+    int curr = 0;
+    trie[curr].count++;
+    for (int i = 30; i >= 0; i--)
+    {
+        int bit = (num >> i) & 1;
+        if (trie[curr].child[bit] == -1)
+        {
+            trie.push_back(node());
+            trie[curr].child[bit] = trie.size() - 1;
+        }
+        curr = trie[curr].child[bit];
+        trie[curr].count++;
+    }
+}
+
+void remove(int num)
+{
+    int curr = 0;
+    trie[curr].count--;
+    for (int i = 30; i >= 0; i--)
+    {
+        int bit = (num >> i) & 1;
+
+        curr = trie[curr].child[bit];
+        trie[curr].count--;
+    }
+}
+
+// now inside of main
+trie.reserve(2e5);
+trie.pb(node());
+
+insert(0);
